@@ -8,8 +8,19 @@ function App() {
   const [rowCount, setRowCount] = useState(0);
 
 const handleClick = () => {
-  const randomContact =copyContactsJSON[Math.floor(Math.random() * copyContactsJSON.length)] 
+  if (copyContactsJSON.length === 0) {
+    return;
+  } else {
+  const filterArr = copyContactsJSON.filter((element) => !contacts.includes(element));
+  const randomIndex = Math.floor(Math.random() * filterArr.length)
+  console.log(randomIndex)
+  const randomContact =filterArr[randomIndex] 
+  filterArr.splice(randomIndex, 1)
   setContacts([...contacts, randomContact])
+  
+  console.log(randomIndex)
+  console.log(filterArr.length)
+}
 }
 return (
     <div className="App">
