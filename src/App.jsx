@@ -3,16 +3,17 @@ import "./App.css";
 import contactsJSON from './contacts.json'
 
 function App() {
-  const copyContactsJSON = JSON.parse(JSON.stringify(contactsJSON));
-  const [contacts, setContacts] = useState(copyContactsJSON.splice(0,5))
-  const [rowCount, setRowCount] = useState(0);
-
+  const [remaining, setRemaining] = useState(contactsJSON.slice(5))
+  const [contacts, setContacts] = useState(contactsJSON.slice(0,5))
+  
 const handleClick = () => {
-  //const filterArr = copyContactsJSON.filter((element) => !contacts.includes(element));
-  const randomIndex = Math.floor(Math.random() * copyContactsJSON.length)
-  const randomContact =copyContactsJSON[randomIndex] 
+  const randomIndex = Math.floor(Math.random() * remaining.length)
+  const randomContact =remaining[randomIndex] 
   setContacts([...contacts, randomContact])
-}
+  const newRemaining = JSON.parse(JSON.stringify(remaining))
+  newRemaining.splice(randomIndex,1)
+  setRemaining(newRemaining)
+  }
 
 const handleClick2 = () => {
   
