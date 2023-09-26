@@ -3,11 +3,18 @@ import "./App.css";
 import contactsJSON from './contacts.json'
 
 function App() {
-const [contacts, setContacts] = useState(contactsJSON.slice(0,5))
-  
+  const copyContactsJSON = JSON.parse(JSON.stringify(contactsJSON));
+  const [contacts, setContacts] = useState(copyContactsJSON.splice(0,5))
+  const [rowCount, setRowCount] = useState(0);
+
+const handleClick = () => {
+  const randomContact =copyContactsJSON[Math.floor(Math.random() * copyContactsJSON.length)] 
+  setContacts([...contacts, randomContact])
+}
 return (
     <div className="App">
       <h1>LAB | React IronContacts</h1>
+      <button onClick={() => handleClick()}>Add Random Contact</button>
       <table>
           <thead>
             <tr>
@@ -32,9 +39,15 @@ return (
               </tr>
        );
             })}
+            
             </tbody>
             </table>
             </div>
 )
           }
 export default App;
+
+
+// button -> math.random i !== contact.id displayed
+
+ // Math.random if id == id list > roll again else print 
