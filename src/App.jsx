@@ -8,24 +8,45 @@ function App() {
   const [rowCount, setRowCount] = useState(0);
 
 const handleClick = () => {
-  if (copyContactsJSON.length === 0) {
-    return;
-  } else {
-  const filterArr = copyContactsJSON.filter((element) => !contacts.includes(element));
-  const randomIndex = Math.floor(Math.random() * filterArr.length)
-  console.log(randomIndex)
-  const randomContact =filterArr[randomIndex] 
-  filterArr.splice(randomIndex, 1)
+  //const filterArr = copyContactsJSON.filter((element) => !contacts.includes(element));
+  const randomIndex = Math.floor(Math.random() * copyContactsJSON.length)
+  const randomContact =copyContactsJSON[randomIndex] 
   setContacts([...contacts, randomContact])
+}
+
+const handleClick2 = () => {
   
-  console.log(randomIndex)
-  console.log(filterArr.length)
+  const ratedContacts = [...contacts].sort((a, b)=>{
+    if (a.popularity<b.popularity) {return 1}
+    if (b.popularity<a.popularity) {return -1}
+    return 0
+   })
+   console.log(ratedContacts)
+    setContacts(ratedContacts)
 }
+
+const handleClick3 = () => {
+  
+  const sortedContacts = [...contacts].sort((a, b)=>{
+  if (a.name<b.name) {return -1}
+  if (b.name<a.name) {return 1}
+  return 0
+ })
+  setContacts(sortedContacts)
 }
+
+const handleClick4 = (id) => {
+  const updatedContacts = contacts.filter((contact) => contact.id !== id);
+  setContacts(updatedContacts);
+  
+}
+
 return (
     <div className="App">
       <h1>LAB | React IronContacts</h1>
       <button onClick={() => handleClick()}>Add Random Contact</button>
+      <button onClick={() => handleClick2()}>Sort by popular</button>
+      <button onClick={() => handleClick3()}>Sort by alphabet</button>
       <table>
           <thead>
             <tr>
@@ -34,6 +55,7 @@ return (
               <th>Popularity</th>
               <th>Won an Oscar</th>
               <th>Won an Emmy</th>
+              <th>DELETE</th>
               </tr>
               </thead>
               <tbody>
@@ -47,6 +69,7 @@ return (
               <td>{oneContact.popularity.toFixed(2)}</td>
               <td>{oneContact.wonOscar ? '🏆 ': ""}</td>
               <td>{oneContact.wonEmmy ? '🏆 ': ""}</td>
+              <td>  <button onClick={() => handleClick4(oneContact.id)}>Delete</button></td>
               </tr>
        );
             })}
