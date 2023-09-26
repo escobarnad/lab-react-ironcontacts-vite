@@ -14,6 +14,8 @@ return (
               <th>Picture</th>
               <th>Name</th>
               <th>Popularity</th>
+              <th>Won an Oscar</th>
+              <th>Won an Emmy</th>
               </tr>
               </thead>
               <tbody>
@@ -24,7 +26,9 @@ return (
             <img src={oneContact.pictureUrl} style={{height: "200px"}} />
               </td>
               <td>{oneContact.name}</td>
-              <td>{oneContact.popularity}</td>
+              <td>{oneContact.popularity.toFixed(2)}</td>
+              <td>{oneContact.wonOscar ? '🏆 ': ""}</td>
+              <td>{oneContact.wonEmmy ? '🏆 ': ""}</td>
               </tr>
        );
             })}
