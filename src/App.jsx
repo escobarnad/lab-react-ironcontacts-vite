@@ -1,88 +1,99 @@
 import { useState } from "react";
 import "./App.css";
-import contactsJSON from './contacts.json'
+import contactsJSON from "./contacts.json";
 
 function App() {
-  const [remaining, setRemaining] = useState(contactsJSON.slice(5))
-  const [contacts, setContacts] = useState(contactsJSON.slice(0,5))
-  
-const handleClick = () => {
-  const randomIndex = Math.floor(Math.random() * remaining.length)
-  const randomContact =remaining[randomIndex] 
-  setContacts([...contacts, randomContact])
-  const newRemaining = JSON.parse(JSON.stringify(remaining))
-  newRemaining.splice(randomIndex,1)
-  setRemaining(newRemaining)
+  const [contacts, setContacts] = useState(contactsJSON.slice(0, 5));
+  const [remaining, setRemaining] = useState(contactsJSON.slice(5));
+  // console.log(contacts)
+
+  const handleAddContact = () => {
+    if (remaining.length === 0){
+      return
+    } else {
+    const randomIndex = Math.floor(Math.random() * remaining.length)
+    const randomContact = remaining[randomIndex]
+    setContacts([randomContact, ...contacts])
+    const newRemaining = JSON.parse(JSON.stringify(remaining))
+    newRemaining.splice(randomIndex, 1)
+    setRemaining(newRemaining)
+  }
+}
+
+  const handleDelete = (id) => {
+    const updatedContacts = contacts.filter((contact) => id !== contact.id);
+    setContacts(updatedContacts);
+  };
+
+  const handleSortName = () => {
+    const sortedNames = contacts.toSorted((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    })
+    setContacts(sortedNames)
   }
 
-const handleClick2 = () => {
-  
-  const ratedContacts = [...contacts].sort((a, b)=>{
-    if (a.popularity<b.popularity) {return 1}
-    if (b.popularity<a.popularity) {return -1}
-    return 0
-   })
-   console.log(ratedContacts)
-    setContacts(ratedContacts)
-}
+  const handleSortPopularity = () =>  {
+    const sortedPopularity = contacts.toSorted((a, b) => {
+      if (a.popularity < b.popularity) {
+        return 1;
+      }
+      if (a.popularity > b.popularity) {
+        return -1;
+      }
+      return 0;
+    })
+    setContacts(sortedPopularity)
+  }
 
-const handleClick3 = () => {
-  
-  const sortedContacts = [...contacts].sort((a, b)=>{
-  if (a.name<b.name) {return -1}
-  if (b.name<a.name) {return 1}
-  return 0
- })
-  setContacts(sortedContacts)
-}
-
-const handleClick4 = (id) => {
-  const updatedContacts = contacts.filter((contact) => contact.id !== id);
-  setContacts(updatedContacts);
-  
-}
-
-return (
+  return (
     <div className="App">
       <h1>LAB | React IronContacts</h1>
-      <button onClick={() => handleClick()}>Add Random Contact</button>
-      <button onClick={() => handleClick2()}>Sort by popular</button>
-      <button onClick={() => handleClick3()}>Sort by alphabet</button>
+      <button onClick={() => handleAddContact()}>Add Random Contact</button>
+      <button onClick={() => handleSortPopularity()}>Sort by popular</button>
+      <button onClick={() => handleSortName()}>Sort by alphabet</button>
       <table>
-          <thead>
-            <tr>
-              <th>Picture</th>
-              <th>Name</th>
-              <th>Popularity</th>
-              <th>Won an Oscar</th>
-              <th>Won an Emmy</th>
-              <th>DELETE</th>
+        <thead>
+          <tr>
+            <th>Picture</th>
+            <th>Name</th>
+            <th>Popularity</th>
+            <th>Won an Oscar</th>
+            <th>Won an Emmy</th>
+            <th>DELETE</th>
+          </tr>
+        </thead>
+        <tbody>
+          {contacts.map((eachContact) => {
+            return (
+              <tr key={eachContact.id}>
+                <td>
+                  <img
+                    src={eachContact.pictureUrl}
+                    alt="profile picture"
+                    height="150 px"
+                  />
+                </td>
+                <td>{eachContact.name}</td>
+                <td>{eachContact.popularity.toFixed(2)}</td>
+                <td>{eachContact.wonOscar && "🏆"}</td>
+                <td>{eachContact.wonEmmy && "🏆"}</td>
+                <td>
+                  <button onClick={() => handleDelete(eachContact.id)}>
+                    Delete
+                  </button>
+                </td>
               </tr>
-              </thead>
-              <tbody>
-      {contacts.map((oneContact) => {
-       return (
-       <tr key={oneContact.id}>
-          <td>
-            <img src={oneContact.pictureUrl} style={{height: "200px"}} />
-              </td>
-              <td>{oneContact.name}</td>
-              <td>{oneContact.popularity.toFixed(2)}</td>
-              <td>{oneContact.wonOscar ? '🏆 ': ""}</td>
-              <td>{oneContact.wonEmmy ? '🏆 ': ""}</td>
-              <td>  <button onClick={() => handleClick4(oneContact.id)}>Delete</button></td>
-              </tr>
-       );
-            })}
-            
-            </tbody>
-            </table>
-            </div>
-)
-          }
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 export default App;
-
-
-// button -> math.random i !== contact.id displayed
-
- // Math.random if id == id list > roll again else print 
